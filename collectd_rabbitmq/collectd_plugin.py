@@ -145,7 +145,7 @@ class CollectdPlugin(object):
 
         vhost_prefix = ''
         if CONFIG.vhost_prefix:
-            vhost_prefix = '%s_' % CONFIG.vhost_prefix
+            vhost_prefix = '%s.' % CONFIG.vhost_prefix
         return '%s%s' % (vhost_prefix, name)
 
     def dispatch_message_stats(self, data, vhost, plugin, plugin_instance):

@@ -293,7 +293,7 @@ class CollectdPlugin(object):
         collectd.debug("Dispatching %s values: %s" % (path, values))
 
         metric = collectd.Values()
-        metric.host = host
+        metric.host = "%s.%s" % (host, CONFIG.connection.host)
 
         metric.plugin = "rabbitmq.%s" % plugin
 

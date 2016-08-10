@@ -149,43 +149,43 @@ class TestCollectdPluginExchanges(BaseTestCollectdPlugin):
         e2_stats = get_message_stats_data('TestExchange2')['message_stats']
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e1_stats['publish_in'], 'rabbitmq_test_vhost', 'exchanges',
+            e1_stats['publish_in'], 'test_vhost', 'exchange',
             'TestExchange1', 'publish_in'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e1_stats['publish_in_details']['rate'], 'rabbitmq_test_vhost',
-            'exchanges', 'TestExchange1', 'publish_in_details', 'rate'
+            e1_stats['publish_in_details']['rate'], 'test_vhost',
+            'exchange', 'TestExchange1', 'publish_in_details', 'rate'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e1_stats['publish_out'], 'rabbitmq_test_vhost', 'exchanges',
+            e1_stats['publish_out'], 'test_vhost', 'exchange',
             'TestExchange1', 'publish_out'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e1_stats['publish_out_details']['rate'], 'rabbitmq_test_vhost',
-            'exchanges', 'TestExchange1', 'publish_out_details', 'rate'
+            e1_stats['publish_out_details']['rate'], 'test_vhost',
+            'exchange', 'TestExchange1', 'publish_out_details', 'rate'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e2_stats['publish_in'], 'rabbitmq_test_vhost', 'exchanges',
+            e2_stats['publish_in'], 'test_vhost', 'exchange',
             'TestExchange2', 'publish_in'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e2_stats['publish_in_details']['rate'], 'rabbitmq_test_vhost',
-            'exchanges', 'TestExchange2', 'publish_in_details', 'rate'
+            e2_stats['publish_in_details']['rate'], 'test_vhost',
+            'exchange', 'TestExchange2', 'publish_in_details', 'rate'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e2_stats['publish_out'], 'rabbitmq_test_vhost', 'exchanges',
+            e2_stats['publish_out'], 'test_vhost', 'exchange',
             'TestExchange2', 'publish_out'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            e2_stats['publish_out_details']['rate'], 'rabbitmq_test_vhost',
-            'exchanges', 'TestExchange2', 'publish_out_details', 'rate'
+            e2_stats['publish_out_details']['rate'], 'test_vhost',
+            'exchange', 'TestExchange2', 'publish_out_details', 'rate'
         )
 
 
@@ -218,43 +218,43 @@ class TestCollectdPluginQueues(BaseTestCollectdPlugin):
         q2_stats = get_message_stats_data('TestQueue2')['message_stats']
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q1_stats['publish_in'], 'rabbitmq_test_vhost', 'queues',
+            q1_stats['publish_in'], 'test_vhost', 'queue',
             'TestQueue1', 'publish_in'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q1_stats['publish_in_details']['rate'], 'rabbitmq_test_vhost',
-            'queues', 'TestQueue1', 'publish_in_details', 'rate'
+            q1_stats['publish_in_details']['rate'], 'test_vhost',
+            'queue', 'TestQueue1', 'publish_in_details', 'rate'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q1_stats['publish_out'], 'rabbitmq_test_vhost', 'queues',
+            q1_stats['publish_out'], 'test_vhost', 'queue',
             'TestQueue1', 'publish_out'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q1_stats['publish_out_details']['rate'], 'rabbitmq_test_vhost',
-            'queues', 'TestQueue1', 'publish_out_details', 'rate'
+            q1_stats['publish_out_details']['rate'], 'test_vhost',
+            'queue', 'TestQueue1', 'publish_out_details', 'rate'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q2_stats['publish_in'], 'rabbitmq_test_vhost', 'queues',
+            q2_stats['publish_in'], 'test_vhost', 'queue',
             'TestQueue2', 'publish_in'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q2_stats['publish_in_details']['rate'], 'rabbitmq_test_vhost',
-            'queues', 'TestQueue2', 'publish_in_details', 'rate'
+            q2_stats['publish_in_details']['rate'], 'test_vhost',
+            'queue', 'TestQueue2', 'publish_in_details', 'rate'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q2_stats['publish_out'], 'rabbitmq_test_vhost', 'queues',
+            q2_stats['publish_out'], 'test_vhost', 'queue',
             'TestQueue2', 'publish_out'
         )
 
         self.collectd_plugin.dispatch_values.assert_any_call(
-            q2_stats['publish_out_details']['rate'], 'rabbitmq_test_vhost',
-            'queues', 'TestQueue2', 'publish_out_details', 'rate'
+            q2_stats['publish_out_details']['rate'], 'test_vhost',
+            'queue', 'TestQueue2', 'publish_out_details', 'rate'
         )
 
 
@@ -268,35 +268,35 @@ class TestCollectdPluginVhost(BaseTestCollectdPlugin):
         Assert empty vhost is set properly.
         """
         vhost = self.collectd_plugin.generate_vhost_name(None)
-        self.assertEquals(vhost, "rabbitmq_default")
+        self.assertEquals(vhost, "default")
 
     def test_generate_vhost_default(self):
         """
         Assert default vhost is set properly.
         """
         vhost = self.collectd_plugin.generate_vhost_name("/")
-        self.assertEquals(vhost, "rabbitmq_default")
+        self.assertEquals(vhost, "default")
 
     def test_generate_vhost_start_slash(self):
         """
         Assert vhost that starts with a '/' is set properly.
         """
         vhost = self.collectd_plugin.generate_vhost_name("/vhost")
-        self.assertEquals(vhost, "rabbitmq_slash_vhost")
+        self.assertEquals(vhost, "slash_vhost")
 
     def test_generate_vhost_end_slash(self):
         """
         Assert vhost that ends with a '/' is set properly.
         """
         vhost = self.collectd_plugin.generate_vhost_name("vhost/")
-        self.assertEquals(vhost, "rabbitmq_vhost_slash")
+        self.assertEquals(vhost, "vhost_slash")
 
     def test_generate_vhost(self):
         """
         Assert vhost that contains a slash is set properly.
         """
         vhost = self.collectd_plugin.generate_vhost_name("vho/st")
-        self.assertEquals(vhost, "rabbitmq_vho_slash_st")
+        self.assertEquals(vhost, "vho_slash_st")
 
 
 class TestCollectdPluginNodes(BaseTestCollectdPlugin):
@@ -387,7 +387,7 @@ class TestCollectdPluginDispatch(BaseTestCollectdPlugin):
         mock_collectd_values.return_value = mock_values
         self.collectd_plugin.dispatch_values((1, 2, 3), 'vhost', 'plugin',
                                              'plugin_instance', 'meteric_type')
-        self.assertEqual(mock_values.host, "vhost")
+        self.assertEqual(mock_values.host, "vhost.localhost")
         self.assertTrue(mock_values.dispatch.called)
 
     @patch('collectd.Values')
@@ -402,7 +402,7 @@ class TestCollectdPluginDispatch(BaseTestCollectdPlugin):
         mock_collectd_values.return_value = mock_values
         self.collectd_plugin.dispatch_values('test_value', 'vhost', 'plugin',
                                              'plugin_instance', 'meteric_type')
-        self.assertEqual(mock_values.host, "vhost")
+        self.assertEqual(mock_values.host, "vhost.localhost")
         self.assertTrue(mock_values.dispatch.called)
 
     @patch('collectd.Values')

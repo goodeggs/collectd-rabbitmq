@@ -185,14 +185,14 @@ class CollectdPlugin(object):
             collectd.debug("Getting stats for %s node" % name)
             for stat_name in self.node_stats:
                 value = node.get(stat_name, 0)
-                self.dispatch_values(value, name, 'rabbitmq', None, stat_name)
+                self.dispatch_values(value, name, 'node', None, stat_name)
 
                 details = node.get("%s_details" % stat_name, None)
                 if not details:
                     continue
                 for detail in self.message_details:
                     value = details.get(detail, 0)
-                    self.dispatch_values(value, name, 'rabbitmq', None,
+                    self.dispatch_values(value, name, 'node', None,
                                          "%s_details" % stat_name, detail)
 
     def dispatch_overview(self):
@@ -254,7 +254,7 @@ class CollectdPlugin(object):
         collectd.debug("Dispatching exchange data for {0}".format(vhost_name))
         stats = self.rabbit.get_exchange_stats(vhost_name=vhost_name)
         for exchange_name, value in stats.iteritems():
-            self.dispatch_message_stats(value, vhost_name, 'exchanges',
+            self.dispatch_message_stats(value, vhost_name, 'exchange',
                                         exchange_name)
 
     def dispatch_queues(self, vhost_name):
@@ -264,9 +264,9 @@ class CollectdPlugin(object):
         collectd.debug("Dispatching queue data for {0}".format(vhost_name))
         stats = self.rabbit.get_queue_stats(vhost_name=vhost_name)
         for queue_name, value in stats.iteritems():
-            self.dispatch_message_stats(value, vhost_name, 'queues',
+            self.dispatch_message_stats(value, vhost_name, 'queue',
                                         queue_name)
-            self.dispatch_queue_stats(value, vhost_name, 'queues',
+            self.dispatch_queue_stats(value, vhost_name, 'queue',
                                       queue_name)
 
     # pylint: disable=R0913

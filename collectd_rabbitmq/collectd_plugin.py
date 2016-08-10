@@ -145,8 +145,8 @@ class CollectdPlugin(object):
 
         vhost_prefix = ''
         if CONFIG.vhost_prefix:
-            vhost_prefix = '%s_' % CONFIG.vhost_prefix
-        return 'rabbitmq_%s%s' % (vhost_prefix, name)
+            vhost_prefix = '%s.' % CONFIG.vhost_prefix
+        return '%s%s' % (vhost_prefix, name)
 
     def dispatch_message_stats(self, data, vhost, plugin, plugin_instance):
         """
@@ -185,14 +185,14 @@ class CollectdPlugin(object):
             collectd.debug("Getting stats for %s node" % name)
             for stat_name in self.node_stats:
                 value = node.get(stat_name, 0)
-                self.dispatch_values(value, name, 'rabbitmq', None, stat_name)
+                self.dispatch_values(value, name, 'node', None, stat_name)
 
                 details = node.get("%s_details" % stat_name, None)
                 if not details:
                     continue
                 for detail in self.message_details:
                     value = details.get(detail, 0)
-                    self.dispatch_values(value, name, 'rabbitmq', None,
+                    self.dispatch_values(value, name, 'node', None,
                                          "%s_details" % stat_name, detail)
 
     def dispatch_overview(self):
@@ -202,7 +202,7 @@ class CollectdPlugin(object):
         stats = self.rabbit.get_overview_stats()
         if stats is None:
             return None
-        prefixed_cluster_name = "rabbitmq_%s" % stats['cluster_name']
+        prefixed_cluster_name = stats['cluster_name']
         for subtree_name, keys in self.overview_stats.items():
             subtree = stats.get(subtree_name, {})
             for stat_name in keys:
@@ -212,7 +212,7 @@ class CollectdPlugin(object):
                     ^(connections|messages|consumers|queues|exchanges|channels)
                     """, re.X)
                 if re.match(stats_re, stat_name) is not None:
-                    type_name = "rabbitmq_%s" % stat_name
+                    type_name = stat_name
 
                 value = subtree.get(stat_name, 0)
                 self.dispatch_values(value, prefixed_cluster_name, "overview",
@@ -226,7 +226,7 @@ class CollectdPlugin(object):
                     detail_values.append(details.get(detail, 0))
                 self.dispatch_values(detail_values, prefixed_cluster_name,
                                      'overview', subtree_name,
-                                     "rabbitmq_details", stat_name)
+                                     "details", stat_name)
 
     def dispatch_queue_stats(self, data, vhost, plugin, plugin_instance):
         """
@@ -254,7 +254,7 @@ class CollectdPlugin(object):
         collectd.debug("Dispatching exchange data for {0}".format(vhost_name))
         stats = self.rabbit.get_exchange_stats(vhost_name=vhost_name)
         for exchange_name, value in stats.iteritems():
-            self.dispatch_message_stats(value, vhost_name, 'exchanges',
+            self.dispatch_message_stats(value, vhost_name, 'exchange',
                                         exchange_name)
 
     def dispatch_queues(self, vhost_name):
@@ -264,9 +264,9 @@ class CollectdPlugin(object):
         collectd.debug("Dispatching queue data for {0}".format(vhost_name))
         stats = self.rabbit.get_queue_stats(vhost_name=vhost_name)
         for queue_name, value in stats.iteritems():
-            self.dispatch_message_stats(value, vhost_name, 'queues',
+            self.dispatch_message_stats(value, vhost_name, 'queue',
                                         queue_name)
-            self.dispatch_queue_stats(value, vhost_name, 'queues',
+            self.dispatch_queue_stats(value, vhost_name, 'queue',
                                       queue_name)
 
     # pylint: disable=R0913
@@ -293,9 +293,9 @@ class CollectdPlugin(object):
         collectd.debug("Dispatching %s values: %s" % (path, values))
 
         metric = collectd.Values()
-        metric.host = host
+        metric.host = "%s.%s" % (host, CONFIG.connection.host)
 
-        metric.plugin = plugin
+        metric.plugin = "rabbitmq.%s" % plugin
 
         if plugin_instance:
             metric.plugin_instance = plugin_instance

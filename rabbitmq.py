@@ -187,8 +187,9 @@ def dispatch_node_metrics(node):
     Dispatches node metrics
     '''
 
+    node_name = "%s.%s" % (node['name'].split('@')[1], PLUGIN_CONFIG['host'])
     for name in NODE_STATS:
-        dispatch_values((node.get(name, 0),), node['name'].split('@')[1],
+        dispatch_values((node.get(name, 0),), node_name,
                         'node', None, name)
 
 

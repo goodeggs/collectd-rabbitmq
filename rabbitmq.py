@@ -141,7 +141,7 @@ def generate_vhost_name(vhost):
         name = re.sub(r'^/', 'slash_', name)
         name = re.sub(r'/$', '_slash', name)
         name = re.sub(r'/', '_slash_', name)
-    return 'rabbitmq_%s' % name
+    return '%s.%s' % (name, PLUGIN_CONFIG['host'])
 
 
 def dispatch_queue_metrics(queue, vhost):

@@ -4,6 +4,9 @@ python plugin for collectd to obtain rabbitmq stats
 import collectd
 import urllib2
 import urllib
+import socket
+import ssl
+import time
 import json
 import re
 
@@ -74,15 +77,21 @@ def get_info(url):
     return json object from url
     '''
 
-    try:
-        info = urllib2.urlopen(url)
-    except urllib2.HTTPError as http_error:
-        collectd.error("Error: %s" % (http_error))
-        return None
-    except urllib2.URLError as url_error:
-        collectd.error("Error: %s" % (url_error))
-        return None
-    return json.load(info)
+    tries = mtries = 3
+    delay = 1
+    backoff = 2
+
+    while mtries > 1:
+        try:
+            info = urllib2.urlopen(url, timeout=3)
+            return json.load(info)
+        except (urllib2.HTTPError, urllib2.URLError, socket.timeout, ssl.SSLError) as err:
+            collectd.debug("Attempt %d/%d failed url=%s error=%s" % ((tries - mtries + 1), tries, url, err))
+            time.sleep(delay)
+            mtries -= 1
+            delay *= backoff
+
+    return None
 
 
 def dispatch_values(values, host, plugin, plugin_instance, metric_type,

@@ -115,7 +115,7 @@ def dispatch_values(values, host, plugin, plugin_instance, metric_type,
         metric.host = host
     metric.plugin = "rabbitmq.%s" % plugin
     if plugin_instance:
-        metric.plugin_instance = plugin_instance
+        metric.plugin_instance = plugin_instance.replace("*", "_")
     metric.type = metric_type
     if type_instance:
         metric.type_instance = type_instance

@@ -2,6 +2,7 @@
 python plugin for collectd to obtain rabbitmq stats
 """
 import collectd
+import httplib
 import urllib2
 import urllib
 import socket
@@ -85,7 +86,7 @@ def get_info(url):
         try:
             info = urllib2.urlopen(url, timeout=3)
             return json.load(info)
-        except (urllib2.HTTPError, urllib2.URLError, socket.timeout, ssl.SSLError) as err:
+        except (httplib.BadStatusLine, urllib2.HTTPError, urllib2.URLError, socket.timeout, ssl.SSLError) as err:
             collectd.warning("Attempt %d/%d failed url=%s error=%s" % ((tries - mtries + 1), tries, url, err))
             time.sleep(delay)
             mtries -= 1

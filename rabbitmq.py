@@ -86,7 +86,7 @@ def get_info(url):
             info = urllib2.urlopen(url, timeout=3)
             return json.load(info)
         except (urllib2.HTTPError, urllib2.URLError, socket.timeout, ssl.SSLError) as err:
-            collectd.debug("Attempt %d/%d failed url=%s error=%s" % ((tries - mtries + 1), tries, url, err))
+            collectd.warning("Attempt %d/%d failed url=%s error=%s" % ((tries - mtries + 1), tries, url, err))
             time.sleep(delay)
             mtries -= 1
             delay *= backoff

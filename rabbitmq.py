@@ -11,7 +11,7 @@ import time
 import json
 import re
 
-RABBIT_API_URL = "{scheme}://{host}:{port}/api/"
+RABBIT_API_URL = "{scheme}://{host}:{port}/api"
 
 QUEUE_MESSAGE_STATS = ['messages', 'messages_ready', 'messages_unacknowledged']
 QUEUE_STATS = ['memory', 'messages', 'consumers']

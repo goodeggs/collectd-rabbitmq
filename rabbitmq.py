@@ -14,7 +14,7 @@ import re
 RABBIT_API_URL = "{scheme}://{host}:{port}/api"
 
 QUEUE_MESSAGE_STATS = ['messages', 'messages_ready', 'messages_unacknowledged']
-QUEUE_STATS = ['memory', 'messages', 'consumers']
+QUEUE_STATS = ['memory', 'consumers']
 
 MESSAGE_STATS = ['ack', 'publish', 'publish_in', 'publish_out', 'confirm',
                  'deliver', 'deliver_noack', 'get', 'get_noack', 'deliver_get',
